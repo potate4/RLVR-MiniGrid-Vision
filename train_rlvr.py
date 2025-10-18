@@ -26,12 +26,25 @@ class MinigridCNN(BaseFeaturesExtractor):
     Custom CNN for MiniGrid visual observations.
 
     Lightweight architecture suitable for RTX 4060.
+
+    Note: VecTransposeImage is automatically applied by SB3, so observations
+    come in as (C, H, W) format already.
     """
 
     def __init__(self, observation_space: gym.spaces.Box, features_dim: int = 128):
         super().__init__(observation_space, features_dim)
 
-        n_input_channels = observation_space.shape[0]
+        # After VecTransposeImage, shape is (C, H, W)
+        # Original MiniGrid obs is (H, W, C) with C=3
+        # We need to handle both cases
+        if observation_space.shape[-1] == 3:
+            # Channels last (H, W, C)
+            n_input_channels = 3
+            sample_input_shape = (3, observation_space.shape[0], observation_space.shape[1])
+        else:
+            # Channels first (C, H, W) - after VecTransposeImage
+            n_input_channels = observation_space.shape[0]
+            sample_input_shape = observation_space.shape
 
         self.cnn = nn.Sequential(
             nn.Conv2d(n_input_channels, 32, kernel_size=3, stride=1, padding=1),
@@ -41,11 +54,10 @@ class MinigridCNN(BaseFeaturesExtractor):
             nn.Flatten(),
         )
 
-        # Compute shape by doing one forward pass
+        # Compute shape by doing one forward pass with correct input shape
         with torch.no_grad():
-            n_flatten = self.cnn(
-                torch.as_tensor(observation_space.sample()[None]).float()
-            ).shape[1]
+            sample_input = torch.zeros((1,) + sample_input_shape)
+            n_flatten = self.cnn(sample_input).shape[1]
 
         self.linear = nn.Sequential(
             nn.Linear(n_flatten, features_dim),
@@ -53,8 +65,7 @@ class MinigridCNN(BaseFeaturesExtractor):
         )
 
     def forward(self, observations: torch.Tensor) -> torch.Tensor:
-        # MiniGrid observations are (H, W, C), need to transpose to (C, H, W)
-        observations = observations.permute(0, 3, 1, 2)
+        # VecTransposeImage already converted to (C, H, W), no need to permute
         return self.linear(self.cnn(observations))
 
 
@@ -144,7 +155,7 @@ def train_rlvr_agent(
     policy_kwargs = dict(
         features_extractor_class=MinigridCNN,
         features_extractor_kwargs=dict(features_dim=128),
-        net_arch=[dict(pi=[64], vf=[64])],  # Smaller network for faster training
+        net_arch=dict(pi=[64], vf=[64]),  # Smaller network for faster training
     )
 
     # Initialize PPO

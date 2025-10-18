@@ -6,6 +6,7 @@ replacing the environment's native reward signal with verified rewards.
 """
 
 import gymnasium as gym
+import minigrid  # Import to register MiniGrid environments
 import numpy as np
 from typing import Tuple, Dict, Any
 from rlvr_verifier import RLVRVerifier
@@ -134,7 +135,7 @@ class VisualObservationWrapper(gym.ObservationWrapper):
         return obs
 
 
-def make_rlvr_env(env_name: str = "MiniGrid-DoorKey-5x5-v0",
+def make_rlvr_env(env_name: str = "MiniGrid-Empty-8x8-v0",
                   task_type: str = "reach_goal",
                   use_rlvr: bool = True,
                   render_mode: str = None):
@@ -150,6 +151,25 @@ def make_rlvr_env(env_name: str = "MiniGrid-DoorKey-5x5-v0",
     Returns:
         Wrapped environment ready for training
     """
+    # Check if environment exists and provide helpful error message
+    available_envs = [e for e in gym.envs.registry.keys() if 'MiniGrid' in e]
+    if env_name not in available_envs:
+        print(f"\nError: Environment '{env_name}' not found.")
+        print(f"\nAvailable MiniGrid environments (showing first 10):")
+        for env in sorted(available_envs)[:10]:
+            print(f"  - {env}")
+        print(f"\nTrying to find similar environment...")
+
+        # Try to find a similar environment
+        base_name = env_name.replace('-v0', '')
+        similar = [e for e in available_envs if base_name.split('-')[-1] in e]
+        if similar:
+            suggested = similar[0]
+            print(f"Suggestion: Try '{suggested}' instead")
+            raise ValueError(f"Environment '{env_name}' not found. Try: {suggested}")
+        else:
+            raise ValueError(f"Environment '{env_name}' not found. Available: {sorted(available_envs)[:5]}")
+
     # Create base environment
     env = gym.make(env_name, render_mode=render_mode)
 

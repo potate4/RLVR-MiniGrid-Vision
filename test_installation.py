@@ -81,9 +81,22 @@ def test_minigrid():
 
     try:
         import gymnasium as gym
+        import minigrid  # Import to register environments
+
+        # Find first available empty environment
+        all_envs = [e for e in gym.envs.registry.keys() if 'MiniGrid' in e]
+        empty_envs = [e for e in all_envs if 'Empty' in e]
+
+        if not empty_envs:
+            print("✗ No MiniGrid Empty environments found!")
+            print(f"Available MiniGrid envs: {sorted(all_envs)[:5]}")
+            return False
+
+        test_env_name = sorted(empty_envs)[0]
+        print(f"Testing with: {test_env_name}")
 
         # Create environment
-        env = gym.make("MiniGrid-Empty-8x8-v0")
+        env = gym.make(test_env_name)
         print("✓ Environment created")
 
         # Reset environment

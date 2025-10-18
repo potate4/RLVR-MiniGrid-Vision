@@ -114,7 +114,7 @@ def quick_training_demo():
     policy_kwargs = dict(
         features_extractor_class=MinigridCNN,
         features_extractor_kwargs=dict(features_dim=128),
-        net_arch=[dict(pi=[64], vf=[64])],
+        net_arch=dict(pi=[64], vf=[64]),
     )
 
     model = PPO(
