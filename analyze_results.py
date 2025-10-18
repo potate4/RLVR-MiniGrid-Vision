@@ -221,7 +221,7 @@ def generate_summary_report(results_dir, output_file='summary_report.txt'):
 
     # Write report
     report_text = "\n".join(report)
-    with open(output_file, 'w') as f:
+    with open(output_file, 'w', encoding='utf-8') as f:
         f.write(report_text)
 
     print(report_text)
