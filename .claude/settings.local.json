@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(python -c \"import gymnasium as gym; import minigrid; print(''Available MiniGrid environments:''); envs = [e for e in gym.envs.registry.keys() if ''MiniGrid'' in e]; print(''\\n''.join(sorted(envs)[:20]))\")"
-    ],
-    "deny": [],
-    "ask": []
-  }
-}
