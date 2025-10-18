@@ -46,6 +46,22 @@ def plot_training_curves(rlvr_dir, baseline_dir=None, save_path='training_curves
         baseline_dir: Directory containing baseline results (optional)
         save_path: Path to save plot
     """
+    print("\n" + "="*70)
+    print("PLOTTING TRAINING CURVES")
+    print("="*70 + "\n")
+
+    # Check if directories exist
+    if not os.path.exists(rlvr_dir):
+        print(f"❌ RLVR directory not found: {rlvr_dir}")
+        print("\nMake sure you've run training first:")
+        print("  python train_rlvr.py --mode rlvr --timesteps 100000")
+        return
+
+    if baseline_dir and not os.path.exists(baseline_dir):
+        print(f"⚠️  Baseline directory not found: {baseline_dir}")
+        print("   Plotting RLVR only...\n")
+        baseline_dir = None
+
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     fig.suptitle('RLVR vs Baseline Training Comparison', fontsize=16, fontweight='bold')
 
@@ -53,102 +69,166 @@ def plot_training_curves(rlvr_dir, baseline_dir=None, save_path='training_curves
     rlvr_tb_dir = None
     baseline_tb_dir = None
 
+    print(f"Searching for TensorBoard logs in: {rlvr_dir}")
     for root, dirs, files in os.walk(rlvr_dir):
-        if 'events.out.tfevents' in str(files):
-            rlvr_tb_dir = root
+        for file in files:
+            if 'events.out.tfevents' in file:
+                rlvr_tb_dir = root
+                print(f"✓ Found RLVR TensorBoard logs: {rlvr_tb_dir}")
+                break
+        if rlvr_tb_dir:
             break
 
     if baseline_dir:
+        print(f"Searching for TensorBoard logs in: {baseline_dir}")
         for root, dirs, files in os.walk(baseline_dir):
-            if 'events.out.tfevents' in str(files):
-                baseline_tb_dir = root
+            for file in files:
+                if 'events.out.tfevents' in file:
+                    baseline_tb_dir = root
+                    print(f"✓ Found baseline TensorBoard logs: {baseline_tb_dir}")
+                    break
+            if baseline_tb_dir:
                 break
 
+    if not rlvr_tb_dir:
+        print(f"\n❌ No TensorBoard logs found in {rlvr_dir}")
+        print("\nPossible reasons:")
+        print("1. Training hasn't been run yet")
+        print("2. Training is still in progress")
+        print("3. Directory path is incorrect")
+        print("\nTo generate logs, run:")
+        print("  python train_rlvr.py --mode rlvr --timesteps 100000")
+        return
+
+    data_plotted = False
+
     if rlvr_tb_dir:
-        print(f"Loading RLVR data from {rlvr_tb_dir}...")
-        rlvr_data = load_tensorboard_data(rlvr_tb_dir)
+        print(f"\nLoading RLVR data from {rlvr_tb_dir}...")
+        try:
+            rlvr_data = load_tensorboard_data(rlvr_tb_dir)
+            print(f"  Available metrics: {list(rlvr_data.keys())}")
+        except Exception as e:
+            print(f"  ❌ Error loading data: {e}")
+            rlvr_data = {}
 
         # Plot episode reward
         if 'rollout/ep_rew_mean' in rlvr_data:
             steps = rlvr_data['rollout/ep_rew_mean']['steps']
             values = rlvr_data['rollout/ep_rew_mean']['values']
             axes[0, 0].plot(steps, values, label='RLVR', linewidth=2, color='blue')
+            data_plotted = True
+            print(f"  ✓ Plotted episode reward ({len(steps)} points)")
 
         # Plot episode length
         if 'rollout/ep_len_mean' in rlvr_data:
             steps = rlvr_data['rollout/ep_len_mean']['steps']
             values = rlvr_data['rollout/ep_len_mean']['values']
             axes[0, 1].plot(steps, values, label='RLVR', linewidth=2, color='blue')
+            data_plotted = True
+            print(f"  ✓ Plotted episode length ({len(steps)} points)")
 
         # Plot loss
         if 'train/loss' in rlvr_data:
             steps = rlvr_data['train/loss']['steps']
             values = rlvr_data['train/loss']['values']
             axes[1, 0].plot(steps, values, label='RLVR', linewidth=2, color='blue')
+            data_plotted = True
+            print(f"  ✓ Plotted training loss ({len(steps)} points)")
 
         # Plot learning rate
         if 'train/learning_rate' in rlvr_data:
             steps = rlvr_data['train/learning_rate']['steps']
             values = rlvr_data['train/learning_rate']['values']
             axes[1, 1].plot(steps, values, label='RLVR', linewidth=2, color='blue')
+            print(f"  ✓ Plotted learning rate ({len(steps)} points)")
 
     if baseline_tb_dir:
-        print(f"Loading baseline data from {baseline_tb_dir}...")
-        baseline_data = load_tensorboard_data(baseline_tb_dir)
+        print(f"\nLoading baseline data from {baseline_tb_dir}...")
+        try:
+            baseline_data = load_tensorboard_data(baseline_tb_dir)
+            print(f"  Available metrics: {list(baseline_data.keys())}")
+        except Exception as e:
+            print(f"  ❌ Error loading data: {e}")
+            baseline_data = {}
 
         # Plot episode reward
         if 'rollout/ep_rew_mean' in baseline_data:
             steps = baseline_data['rollout/ep_rew_mean']['steps']
             values = baseline_data['rollout/ep_rew_mean']['values']
             axes[0, 0].plot(steps, values, label='Baseline', linewidth=2, color='orange', linestyle='--')
+            data_plotted = True
+            print(f"  ✓ Plotted episode reward ({len(steps)} points)")
 
         # Plot episode length
         if 'rollout/ep_len_mean' in baseline_data:
             steps = baseline_data['rollout/ep_len_mean']['steps']
             values = baseline_data['rollout/ep_len_mean']['values']
             axes[0, 1].plot(steps, values, label='Baseline', linewidth=2, color='orange', linestyle='--')
+            data_plotted = True
+            print(f"  ✓ Plotted episode length ({len(steps)} points)")
 
         # Plot loss
         if 'train/loss' in baseline_data:
             steps = baseline_data['train/loss']['steps']
             values = baseline_data['train/loss']['values']
             axes[1, 0].plot(steps, values, label='Baseline', linewidth=2, color='orange', linestyle='--')
+            data_plotted = True
+            print(f"  ✓ Plotted training loss ({len(steps)} points)")
 
         # Plot learning rate
         if 'train/learning_rate' in baseline_data:
             steps = baseline_data['train/learning_rate']['steps']
             values = baseline_data['train/learning_rate']['values']
             axes[1, 1].plot(steps, values, label='Baseline', linewidth=2, color='orange', linestyle='--')
+            print(f"  ✓ Plotted learning rate ({len(steps)} points)")
 
     # Formatting
     axes[0, 0].set_xlabel('Training Steps')
     axes[0, 0].set_ylabel('Mean Episode Reward')
     axes[0, 0].set_title('Episode Reward')
-    axes[0, 0].legend()
+    if axes[0, 0].get_lines():
+        axes[0, 0].legend()
     axes[0, 0].grid(True, alpha=0.3)
 
     axes[0, 1].set_xlabel('Training Steps')
     axes[0, 1].set_ylabel('Mean Episode Length')
     axes[0, 1].set_title('Episode Length')
-    axes[0, 1].legend()
+    if axes[0, 1].get_lines():
+        axes[0, 1].legend()
     axes[0, 1].grid(True, alpha=0.3)
 
     axes[1, 0].set_xlabel('Training Steps')
     axes[1, 0].set_ylabel('Loss')
     axes[1, 0].set_title('Training Loss')
-    axes[1, 0].legend()
+    if axes[1, 0].get_lines():
+        axes[1, 0].legend()
     axes[1, 0].grid(True, alpha=0.3)
 
     axes[1, 1].set_xlabel('Training Steps')
     axes[1, 1].set_ylabel('Learning Rate')
     axes[1, 1].set_title('Learning Rate Schedule')
-    axes[1, 1].legend()
+    if axes[1, 1].get_lines():
+        axes[1, 1].legend()
     axes[1, 1].grid(True, alpha=0.3)
 
     plt.tight_layout()
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    print(f"\nPlot saved to {save_path}")
-    plt.show()
+
+    print("\n" + "="*70)
+    if data_plotted:
+        print(f"✓ Plot saved to {save_path}")
+        print("\nYou can now:")
+        print("  1. View the plot image")
+        print("  2. Use it in your survey paper")
+        print("  3. Compare RLVR vs baseline visually")
+    else:
+        print(f"⚠️  Plot saved to {save_path} but contains no data")
+        print("\nNo training data was found to plot.")
+        print("Make sure you've completed training first:")
+        print("  python train_rlvr.py --mode compare --timesteps 100000")
+    print("="*70 + "\n")
+
+    plt.close()
 
 
 def generate_summary_report(results_dir, output_file='summary_report.txt'):
