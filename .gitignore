@@ -69,3 +69,4 @@ summary_report.txt
 # OS
 .DS_Store
 Thumbs.db
+.claude/
