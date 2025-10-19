@@ -1,7 +1,7 @@
 % RLVR Survey Paper - LaTeX Version
 % A Comprehensive Survey of Reinforcement Learning with Verifiable Rewards
 
-\documentclass[10pt,twocolumn,a4paper]{article}
+\documentclass[11pt,a4paper]{article}
 
 % Essential packages
 \usepackage[utf8]{inputenc}
@@ -14,66 +14,27 @@
 \usepackage{multirow}
 \usepackage{array}
 \usepackage{url}
-\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
-\usepackage[margin=0.75in,top=1in,bottom=1in]{geometry}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{enumitem}
-\usepackage{microtype}  % Better typography
-\usepackage{times}      % Times font for professional look
-\usepackage{titlesec}   % Better section formatting
-\usepackage{abstract}   % Better abstract formatting
-
-% Better section formatting
-\titleformat{\section}
-  {\normalfont\large\bfseries}{\thesection}{1em}{}
-\titleformat{\subsection}
-  {\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
-\titleformat{\subsubsection}
-  {\normalfont\normalsize\itshape}{\thesubsubsection}{1em}{}
-
-% Reduce spacing around sections
-\titlespacing*{\section}{0pt}{12pt plus 4pt minus 2pt}{6pt plus 2pt minus 2pt}
-\titlespacing*{\subsection}{0pt}{10pt plus 3pt minus 2pt}{4pt plus 2pt minus 2pt}
-\titlespacing*{\subsubsection}{0pt}{8pt plus 2pt minus 2pt}{4pt plus 2pt minus 2pt}
+\renewcommand{\rmdefault}{bch} % example: Bitstream Charter
 
 % Code listing settings
 \lstset{
-    basicstyle=\ttfamily\scriptsize,
-    keywordstyle=\color{blue}\bfseries,
-    commentstyle=\color{green!60!black}\itshape,
-    stringstyle=\color{red!80!black},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
     showstringspaces=false,
     breaklines=true,
-    frame=tb,
-    framesep=5pt,
+    frame=single,
     numbers=left,
     numberstyle=\tiny\color{gray},
-    numbersep=8pt,
-    xleftmargin=15pt,
-    language=Python,
-    captionpos=b,
-    aboveskip=10pt,
-    belowskip=5pt
-}
-
-% Better caption formatting
-\captionsetup{
-    font=small,
-    labelfont=bf,
-    format=plain,
-    labelsep=period,
-    justification=justified,
-    singlelinecheck=false
-}
-
-% Tighter list spacing
-\setlist{
-    itemsep=2pt,
-    parsep=2pt,
-    topsep=4pt
+    language=Python
 }
 
 % Theorem environments
@@ -90,37 +51,29 @@
 \newcommand{\cnn}{\textsc{cnn}}
 
 % Title and authors
-\title{\LARGE\textbf{A Comprehensive Survey of Reinforcement Learning with Verifiable Rewards: \\[0.5em] From Language to Vision and Multimodal Agents}}
+\title{\textbf{A Comprehensive Survey of Reinforcement Learning with Verifiable Rewards: From Language to Vision and Multimodal Agents}}
 
 \author{
     % Author names to be filled in
-    \textbf{Authors}\\[0.3em]
-    \textit{Affiliation}\\[0.2em]
+    \textit{Authors}\\
+    \textit{Affiliation}\\
     \texttt{email@institution.edu}
 }
 
-\date{}
+\date{\today}
 
 \begin{document}
 
-% Title section - spans both columns
-\twocolumn[
-\begin{@twocolumnfalse}
 \maketitle
 
 \begin{abstract}
-\noindent
 Reinforcement learning (RL) has achieved remarkable success across diverse domains, yet the challenge of reward misalignment remains a critical bottleneck for deploying safe and effective RL systems. Traditional approaches relying on handcrafted reward functions or human feedback (\rlhf{}) face fundamental limitations in scalability, interpretability, and verifiability. This survey presents a comprehensive examination of \textbf{Reinforcement Learning with Verifiable Rewards (\rlvr{})}, an emerging paradigm that addresses these challenges through formal, automated verification of task completion. We systematically explore \rlvr{} methodologies across text, vision, and multimodal domains, with particular emphasis on vision-based \rlvr{} where reward verification presents unique architectural challenges. We provide a unified taxonomy of verification mechanisms, compare approaches across modalities, and identify key challenges and future research directions. This survey includes analysis of a complete open-source implementation of vision-based \rlvr{} on grid-world environments, demonstrating the practical feasibility of bridging visual perception with symbolic reward verification.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Reinforcement Learning, Verifiable Rewards, Visual Reasoning, Multimodal Learning, AI Safety, Reward Engineering
 
-\vspace{1em}
-\end{@twocolumnfalse}
-]
-
-% Adjust column separation
-\setlength{\columnsep}{0.25in}
+\tableofcontents
+\newpage
 
 % ============================================================================
 \section{Introduction}
@@ -318,12 +271,12 @@ The agent is trained using $\mathcal{R}_{\text{rlvr}}$ instead of $\mathcal{R}_{
 
 Table~\ref{tab:rlhf_vs_rlvr} presents a comprehensive comparison between \rlhf{} and \rlvr{}.
 
-\begin{table*}[t]
+\begin{table}[t]
 \centering
 \caption{Comparison of \rlhf{} and \rlvr{} approaches}
 \label{tab:rlhf_vs_rlvr}
 \small
-\begin{tabular}{@{}p{3cm}p{5cm}p{5cm}@{}}
+\begin{tabular}{@{}lll@{}}
 \toprule
 \textbf{Aspect} & \textbf{\rlhf{}} & \textbf{\rlvr{}} \\
 \midrule
@@ -336,7 +289,7 @@ Domain Applicability & Primarily text & All modalities \\
 Update Speed & Slow (requires re-annotation) & Fast (update rules) \\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
 % ============================================================================
 \section{Taxonomy of \rlvr{} Verification Mechanisms}
@@ -628,18 +581,19 @@ The implementation consists of three core modules:
 
 \textbf{Module 1: \rlvr{} Verifier} (Listing~\ref{lst:verifier})
 
-\begin{lstlisting}[caption={Core verification logic from \texttt{rlvr\_verifier.py}}, label=lst:verifier, language=Python, basicstyle=\ttfamily\tiny]
+\begin{lstlisting}[caption={Core verification logic from \texttt{rlvr\_verifier.py}}, label=lst:verifier, language=Python]
 class RLVRVerifier:
-    """Independent verifier for MiniGrid."""
+    """Independent reward verifier for MiniGrid."""
     
     def extract_symbolic_state(self, obs, env):
-        """Extract symbolic state."""
+        """Extract symbolic state from environment."""
         symbolic_state = {
             'agent_pos': tuple(env.unwrapped.agent_pos),
             'agent_dir': int(env.unwrapped.agent_dir),
             'carrying': None,
             'goal_pos': None,
         }
+        
         # Scan grid for objects
         grid = env.unwrapped.grid
         for i in range(grid.width):
@@ -647,28 +601,29 @@ class RLVRVerifier:
                 cell = grid.get(i, j)
                 if cell and cell.type == 'goal':
                     symbolic_state['goal_pos'] = (i, j)
+        
         return symbolic_state
     
-    def verify_task_completion(self, s_state):
+    def verify_task_completion(self, symbolic_state):
         """Apply formal verification rules."""
         if self.task_type == "reach_goal":
-            goal_pos = s_state.get('goal_pos')
-            agent_pos = s_state['agent_pos']
+            goal_pos = symbolic_state.get('goal_pos')
+            agent_pos = symbolic_state['agent_pos']
             
             if goal_pos and agent_pos == goal_pos:
                 # SUCCESS: Rule satisfied
                 return 1.0, {
                     'verified': True,
                     'rule_applied': 'REACH_GOAL',
-                    'explanation': "Goal reached"
+                    'explanation': f"Agent reached goal"
                 }
             else:
-                # Distance-based shaping
-                dist = abs(agent_pos[0] - goal_pos[0]) + \
-                       abs(agent_pos[1] - goal_pos[1])
-                return -0.001 * dist, {
+                # PROGRESS: Distance-based shaping
+                distance = abs(agent_pos[0] - goal_pos[0]) + \
+                          abs(agent_pos[1] - goal_pos[1])
+                return -0.001 * distance, {
                     'verified': False,
-                    'explanation': f"Distance: {dist}"
+                    'explanation': f"Distance: {distance}"
                 }
 \end{lstlisting}
 
@@ -682,37 +637,38 @@ class RLVRVerifier:
 
 \textbf{Module 2: Environment Wrapper} (Listing~\ref{lst:wrapper})
 
-\begin{lstlisting}[caption={Environment integration from \texttt{rlvr\_env\_wrapper.py}}, label=lst:wrapper, language=Python, basicstyle=\ttfamily\tiny]
+\begin{lstlisting}[caption={Environment integration from \texttt{rlvr\_env\_wrapper.py}}, label=lst:wrapper, language=Python]
 class RLVRMiniGridWrapper(gym.Wrapper):
-    """Replaces env rewards with verified rewards."""
+    """Replaces env rewards with RLVR-verified rewards."""
     
     def step(self, action):
-        """Execute action, compute RLVR reward."""
+        """Execute action and compute RLVR reward."""
         # Step 1: Execute in base environment
-        obs, env_reward, done, trunc, info = \
+        obs, env_reward, terminated, truncated, info = \
             self.env.step(action)
         
         # Step 2: Extract symbolic state
-        s_state = self.verifier.extract_symbolic_state(
-            obs, self.env)
+        symbolic_state = \
+            self.verifier.extract_symbolic_state(obs, self.env)
         
         if self.use_rlvr:
-            # RLVR MODE - verified reward
-            v_reward, v_info = \
+            # Step 3: RLVR MODE - compute verified reward
+            verified_reward, verification_info = \
                 self.verifier.verify_task_completion(
-                    s_state)
-            reward = v_reward  # Use verified!
+                    symbolic_state
+                )
+            reward = verified_reward  # USE VERIFIED REWARD
             
-            # Add verification metadata
-            info['rlvr_verification'] = v_info
+            # Step 4: Add verification metadata
+            info['rlvr_verification'] = verification_info
             info['env_reward'] = env_reward
-            info['reward_source'] = 'rlvr'
+            info['reward_source'] = 'rlvr_verifier'
         else:
-            # BASELINE - environment reward
+            # BASELINE MODE - use environment reward
             reward = env_reward
             info['reward_source'] = 'environment'
         
-        return obs, reward, done, trunc, info
+        return obs, reward, terminated, truncated, info
 \end{lstlisting}
 
 \textbf{Module 3: Training Pipeline}

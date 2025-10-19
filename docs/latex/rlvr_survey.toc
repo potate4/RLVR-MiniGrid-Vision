@@ -1,0 +1,71 @@
+\contentsline {section}{\numberline {1}Introduction}{4}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Motivation}{4}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Scope and Focus}{4}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Survey Contributions}{5}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Organization}{5}{subsection.1.4}%
+\contentsline {section}{\numberline {2}Background and Foundations}{6}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Reinforcement Learning Basics}{6}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}The Reward Misalignment Problem}{6}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Reward Hacking}{6}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Reward Misspecification}{7}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Verification Impossibility}{7}{subsubsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.3}From \textsc {rlhf}{} to \textsc {rlvr}{}}{7}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Reinforcement Learning from Human Feedback (\textsc {rlhf}{})}{7}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}The \textsc {rlvr}{} Paradigm}{8}{subsubsection.2.3.2}%
+\contentsline {section}{\numberline {3}Taxonomy of \textsc {rlvr}{} Verification Mechanisms}{8}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Programmatic Verification}{8}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Symbolic/Rule-Based Verification}{9}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Visual Proxy Verification}{10}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Environment-Based Verification}{10}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Text-Based \textsc {rlvr}{}}{11}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Code Generation with Programmatic Verification}{11}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Mathematical Reasoning}{11}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Question Answering with Truth Verification}{11}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Lessons from Text-Based \textsc {rlvr}{}}{11}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Vision-Based \textsc {rlvr}{}: Bridging Perception and Verification}{11}{section.5}%
+\contentsline {subsection}{\numberline {5.1}The Vision-Symbolic Gap}{11}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Architecture of Vision-Based \textsc {rlvr}{} Systems}{12}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Implementation Case Study: MiniGrid Vision-Based \textsc {rlvr}{}}{12}{subsection.5.3}%
+\contentsline {subsubsection}{\numberline {5.3.1}System Overview}{12}{subsubsection.5.3.1}%
+\contentsline {subsubsection}{\numberline {5.3.2}Code Architecture}{13}{subsubsection.5.3.2}%
+\contentsline {subsubsection}{\numberline {5.3.3}Training Dynamics}{14}{subsubsection.5.3.3}%
+\contentsline {subsubsection}{\numberline {5.3.4}Verification in Action}{15}{subsubsection.5.3.4}%
+\contentsline {subsubsection}{\numberline {5.3.5}Extensibility: Adding Custom Rules}{15}{subsubsection.5.3.5}%
+\contentsline {subsection}{\numberline {5.4}Advanced Vision-Based \textsc {rlvr}{} Systems}{16}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Challenges in Vision-Based \textsc {rlvr}{}}{16}{subsection.5.5}%
+\contentsline {subsubsection}{\numberline {5.5.1}The Privileged Information Problem}{16}{subsubsection.5.5.1}%
+\contentsline {subsubsection}{\numberline {5.5.2}Computational Overhead}{16}{subsubsection.5.5.2}%
+\contentsline {subsubsection}{\numberline {5.5.3}Verification Rule Design}{16}{subsubsection.5.5.3}%
+\contentsline {section}{\numberline {6}Multimodal and Emerging \textsc {rlvr}{} Architectures}{17}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Hybrid Symbolic-Neural Verification}{17}{subsection.6.1}%
+\contentsline {section}{\numberline {7}Comparative Analysis: \textsc {rlvr}{} Across Modalities}{17}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Modality Comparison}{17}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}When to Use \textsc {rlvr}{} vs. \textsc {rlhf}{}}{17}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Architectural Design Patterns}{17}{subsection.7.3}%
+\contentsline {section}{\numberline {8}Challenges and Open Problems}{18}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Vision-Specific Challenges}{18}{subsection.8.1}%
+\contentsline {subsubsection}{\numberline {8.1.1}Semantic Verification Gap}{18}{subsubsection.8.1.1}%
+\contentsline {subsubsection}{\numberline {8.1.2}Perception Unreliability}{18}{subsubsection.8.1.2}%
+\contentsline {subsection}{\numberline {8.2}Scalability Challenges}{18}{subsection.8.2}%
+\contentsline {subsubsection}{\numberline {8.2.1}Verification Computational Cost}{18}{subsubsection.8.2.1}%
+\contentsline {subsection}{\numberline {8.3}Benchmark and Evaluation Gaps}{19}{subsection.8.3}%
+\contentsline {subsubsection}{\numberline {8.3.1}Lack of Standardized Vision-\textsc {rlvr}{} Benchmarks}{19}{subsubsection.8.3.1}%
+\contentsline {subsubsection}{\numberline {8.3.2}Evaluation Metrics for \textsc {rlvr}{}}{19}{subsubsection.8.3.2}%
+\contentsline {section}{\numberline {9}Future Research Directions}{19}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Vision-Based \textsc {rlvr}{} Frontiers}{19}{subsection.9.1}%
+\contentsline {subsubsection}{\numberline {9.1.1}Real-World Visual \textsc {rlvr}{}}{19}{subsubsection.9.1.1}%
+\contentsline {subsubsection}{\numberline {9.1.2}Compositional Visual Reasoning}{19}{subsubsection.9.1.2}%
+\contentsline {subsection}{\numberline {9.2}Multimodal \textsc {rlvr}{}}{20}{subsection.9.2}%
+\contentsline {subsubsection}{\numberline {9.2.1}Vision-Language-Action Agents}{20}{subsubsection.9.2.1}%
+\contentsline {subsection}{\numberline {9.3}Theoretical Foundations}{20}{subsection.9.3}%
+\contentsline {subsubsection}{\numberline {9.3.1}Formal Verification Guarantees}{20}{subsubsection.9.3.1}%
+\contentsline {subsection}{\numberline {9.4}Applications and Impact}{20}{subsection.9.4}%
+\contentsline {subsubsection}{\numberline {9.4.1}AI Safety and Alignment}{20}{subsubsection.9.4.1}%
+\contentsline {subsubsection}{\numberline {9.4.2}Embodied AI and Robotics}{20}{subsubsection.9.4.2}%
+\contentsline {section}{\numberline {10}Conclusion}{20}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Key Takeaways}{21}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Vision for the Future}{21}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Closing Remarks}{21}{subsection.10.3}%
+\contentsline {section}{\numberline {A}Implementation Details}{22}{appendix.A}%
+\contentsline {section}{\numberline {B}Verification Rule Specification}{22}{appendix.B}%
+\contentsline {section}{\numberline {C}Experimental Results}{23}{appendix.C}%
